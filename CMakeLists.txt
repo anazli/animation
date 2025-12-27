@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(animation LANGUAGES CXX)
+project(animation LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -15,13 +15,29 @@ add_library(animation
 
 	src/application.cpp
 	src/glad.c
-	src/main.cpp
+	src/windows.h
+	src/windows.cpp
 )
+
+add_executable(animation-app src/main.cpp)
+target_link_libraries(animation-app PRIVATE animation)
 
 target_include_directories(animation
 	PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 		$<INSTALL_INTERFACE:include>
+)
+
+set_source_files_properties(src/glad.c PROPERTIES LANGUAGE C)
+target_compile_definitions(animation PRIVATE
+	$<$<COMPILE_LANGUAGE:C>:GLAD_GLAPI_EXPORT_BUILD>
+)
+
+# Disable specific MSVC warnings when building for Windows using generator expressions
+# Applies only when the compiler is MSVC and the platform is Windows
+target_compile_options(animation PRIVATE
+	$<$<AND:$<CXX_COMPILER_ID:MSVC>,$<PLATFORM_ID:Windows>>:/wd28251>
+	$<$<AND:$<CXX_COMPILER_ID:MSVC>,$<PLATFORM_ID:Windows>>:/wd28159>
 )
 
 if(MSVC)
