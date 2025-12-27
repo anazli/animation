@@ -10,11 +10,13 @@ find_package(OpenGL REQUIRED)
 
 add_library(animation
 	include/application.h
+	include/shader.h
 	include/glad/glad.h
 	include/KHR/khrplatform.h
 
 	src/application.cpp
 	src/glad.c
+	src/shader.cpp
 	src/windows.h
 	src/windows.cpp
 )
