@@ -11,6 +11,7 @@ find_package(OpenGL REQUIRED)
 add_library(animation
 	include/application.h
 	include/attribute.h
+	include/draw.h
 	include/index_buffer.h
 	include/shader.h
 	include/uniform.h
@@ -21,6 +22,7 @@ add_library(animation
 	include/math/vec4.h
 
 	src/application.cpp
+	src/draw.cpp
 	src/glad.c
 	src/index_buffer.cpp
 	src/shader.cpp
