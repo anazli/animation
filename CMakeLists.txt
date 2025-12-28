@@ -19,7 +19,6 @@ add_library(animation
 	include/math/vec4.h
 
 	src/application.cpp
-	src/attribute.cpp
 	src/glad.c
 	src/shader.cpp
 	src/windows.h
