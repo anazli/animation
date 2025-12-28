@@ -3,6 +3,9 @@
 #include <vector>
 
 #include "glad/glad.h"
+#include "math/vec2.h"
+#include "math/vec3.h"
+#include "math/vec4.h"
 
 namespace core {
 template <typename T>
@@ -20,10 +23,18 @@ class Attribute {
   unsigned int GetHandle() const;
   unsigned int GetDataCount() const;
 
+  void SetAttribPointer(unsigned int slot);
+
  protected:
   unsigned int m_handle;
   unsigned int m_data_count;
 };
+
+template Attribute<int>;
+template Attribute<float>;
+template Attribute<Vec2D>;
+template Attribute<Vec3D>;
+template Attribute<Vec4D>;
 
 template <typename T>
 inline core::Attribute<T>::Attribute() : m_data_count(0) {
@@ -72,6 +83,31 @@ inline unsigned int Attribute<T>::GetHandle() const {
 template <typename T>
 inline unsigned int Attribute<T>::GetDataCount() const {
   return m_data_count;
+}
+
+template <>
+void Attribute<int>::SetAttribPointer(unsigned int slot) {
+  glVertexAttribIPointer(slot, 1, GL_INT, 0, (void*)0);
+}
+
+template <>
+void Attribute<float>::SetAttribPointer(unsigned int slot) {
+  glVertexAttribPointer(slot, 1, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+template <>
+void Attribute<Vec2D>::SetAttribPointer(unsigned int slot) {
+  glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+template <>
+void Attribute<Vec3D>::SetAttribPointer(unsigned int slot) {
+  glVertexAttribPointer(slot, 3, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
+template <>
+void Attribute<Vec4D>::SetAttribPointer(unsigned int slot) {
+  glVertexAttribPointer(slot, 4, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 }  // namespace core
