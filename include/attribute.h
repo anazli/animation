@@ -32,9 +32,9 @@ class Attribute {
 
 template Attribute<int>;
 template Attribute<float>;
-template Attribute<Vec2D>;
-template Attribute<Vec3D>;
-template Attribute<Vec4D>;
+template Attribute<Vec2f>;
+template Attribute<Vec3f>;
+template Attribute<Vec4f>;
 
 template <typename T>
 inline core::Attribute<T>::Attribute() : m_data_count(0) {
@@ -96,17 +96,17 @@ void Attribute<float>::SetAttribPointer(unsigned int slot) {
 }
 
 template <>
-void Attribute<Vec2D>::SetAttribPointer(unsigned int slot) {
+void Attribute<Vec2f>::SetAttribPointer(unsigned int slot) {
   glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 template <>
-void Attribute<Vec3D>::SetAttribPointer(unsigned int slot) {
+void Attribute<Vec3f>::SetAttribPointer(unsigned int slot) {
   glVertexAttribPointer(slot, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 template <>
-void Attribute<Vec4D>::SetAttribPointer(unsigned int slot) {
+void Attribute<Vec4f>::SetAttribPointer(unsigned int slot) {
   glVertexAttribPointer(slot, 4, GL_FLOAT, GL_FALSE, 0, 0);
 }
 

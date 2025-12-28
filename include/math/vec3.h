@@ -78,7 +78,8 @@ class Vec3 {
   T m_z = T{};
 };
 
-using Vec3D = Vec3<float>;
+using Vec3i = Vec3<int>;
+using Vec3f = Vec3<float>;
 
 //--------------------------------------------
 // Overloaded Member operators (input, output)

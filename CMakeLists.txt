@@ -12,6 +12,7 @@ add_library(animation
 	include/application.h
 	include/attribute.h
 	include/shader.h
+	include/uniform.h
 	include/glad/glad.h
 	include/KHR/khrplatform.h
 	include/math/vec2.h

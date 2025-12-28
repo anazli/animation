@@ -98,7 +98,8 @@ class Vec4 {
   T m_w = T{};
 };
 
-using Vec4D = Vec4<float>;
+using Vec4i = Vec4<int>;
+using Vec4f = Vec4<float>;
 
 //--------------------------------------------
 // Overloaded Member operators

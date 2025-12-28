@@ -47,7 +47,8 @@ class Vec2 {
   T m_y = T{};
 };
 
-using Vec2D = Vec2<float>;
+using Vec2i = Vec2<int>;
+using Vec2f = Vec2<float>;
 
 //--------------------------------------------
 // Overloaded Member operators
