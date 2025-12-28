@@ -11,6 +11,7 @@ find_package(OpenGL REQUIRED)
 add_library(animation
 	include/application.h
 	include/attribute.h
+	include/index_buffer.h
 	include/shader.h
 	include/uniform.h
 	include/glad/glad.h
@@ -21,6 +22,7 @@ add_library(animation
 
 	src/application.cpp
 	src/glad.c
+	src/index_buffer.cpp
 	src/shader.cpp
 	src/windows.h
 	src/windows.cpp
