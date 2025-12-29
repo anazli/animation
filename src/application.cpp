@@ -1,5 +1,7 @@
 #include "application.h"
 
+#include "sample1/sample1.h"
+
 std::unique_ptr<core::Application> core::Application::m_instance = nullptr;
 
 GLuint& core::Application::GetVertexArrayObject() { return m_vertex_array_obj; }
@@ -21,6 +23,10 @@ core::Application* core::Application::Instance() {
     m_instance.reset(new Application());
   }
   return m_instance.get();
+}
+
+std::unique_ptr<core::Application> core::Application::CreateSample1() {
+  return std::make_unique<Sample1>();
 }
 
 core::Application::Application() : m_vertex_array_obj(0) {}

@@ -8,6 +8,7 @@
 
 class Sample1 : public core::Application {
  public:
+  Sample1();
   void Initialize() override;
   void Update(float delta_time) override;
   void Render(float aspect_ratio) override;

@@ -20,8 +20,9 @@ class Application {
   virtual void Shutdown();
 
   static Application* Instance();
+  static std::unique_ptr<Application> CreateSample1();
 
- private:
+ protected:
   Application();
 
   static std::unique_ptr<Application> m_instance;

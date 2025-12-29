@@ -30,12 +30,6 @@ class Attribute {
   unsigned int m_data_count;
 };
 
-template Attribute<int>;
-template Attribute<float>;
-template Attribute<Vec2f>;
-template Attribute<Vec3f>;
-template Attribute<Vec4f>;
-
 template <typename T>
 inline core::Attribute<T>::Attribute() : m_data_count(0) {
   glGenBuffers(1, &m_handle);
@@ -86,27 +80,27 @@ inline unsigned int Attribute<T>::GetDataCount() const {
 }
 
 template <>
-void Attribute<int>::SetAttribPointer(unsigned int slot) {
+inline void Attribute<int>::SetAttribPointer(unsigned int slot) {
   glVertexAttribIPointer(slot, 1, GL_INT, 0, (void*)0);
 }
 
 template <>
-void Attribute<float>::SetAttribPointer(unsigned int slot) {
+inline void Attribute<float>::SetAttribPointer(unsigned int slot) {
   glVertexAttribPointer(slot, 1, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 template <>
-void Attribute<Vec2f>::SetAttribPointer(unsigned int slot) {
+inline void Attribute<Vec2f>::SetAttribPointer(unsigned int slot) {
   glVertexAttribPointer(slot, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 template <>
-void Attribute<Vec3f>::SetAttribPointer(unsigned int slot) {
+inline void Attribute<Vec3f>::SetAttribPointer(unsigned int slot) {
   glVertexAttribPointer(slot, 3, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 template <>
-void Attribute<Vec4f>::SetAttribPointer(unsigned int slot) {
+inline void Attribute<Vec4f>::SetAttribPointer(unsigned int slot) {
   glVertexAttribPointer(slot, 4, GL_FLOAT, GL_FALSE, 0, 0);
 }
 

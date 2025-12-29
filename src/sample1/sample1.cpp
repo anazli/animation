@@ -4,6 +4,8 @@
 #include "math/mat4.h"
 #include "uniform.h"
 
+Sample1::Sample1():core::Application() {}
+
 void Sample1::Initialize() {
   m_rotation = 0.f;
   m_shader = std::make_unique<core::Shader>("shaders/basic.vert",
@@ -55,7 +57,8 @@ void Sample1::Render(float aspect_ratio) {
   auto view = Mat4f();
   view.LookAt(Vec3f(0.f, 0.f, -5.f), Vec3f(0.f, 0.f, 0.f),
               Vec3f(0.f, 1.f, 0.f));
-  auto model = Mat4f();
+  auto model = Mat4f(Vec4f(1.f, 1.f, 1.f, 1.f), Vec4f(1.f, 1.f, 1.f, 1.f),
+                     Vec4f(1.f, 1.f, 1.f, 1.f), Vec4f(1.f, 1.f, 1.f, 1.f));
   auto light = Vec3f(0.f, 0.f, 1.f);
 
   m_shader->Bind();

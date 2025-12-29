@@ -18,7 +18,7 @@ typedef int(WINAPI* PFNWGLGETSWAPINTERVALEXTPROC)(void);
 
 int WINAPI WinMain(HINSTANCE instance, HINSTANCE prev_instance, PSTR cmd_line,
                    int cmd_show) {
-  auto application = core::Application::Instance();
+  auto application = core::Application::CreateSample1();
   WNDCLASSEX wndclass;
   wndclass.cbSize = sizeof(WNDCLASSEX);
   wndclass.style = CS_HREDRAW | CS_VREDRAW;
