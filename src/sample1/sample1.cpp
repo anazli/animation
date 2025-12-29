@@ -1,5 +1,9 @@
 #include "sample1.h"
 
+#include "draw.h"
+#include "math/mat4.h"
+#include "uniform.h"
+
 void Sample1::Initialize() {
   m_rotation = 0.f;
   m_shader = std::make_unique<core::Shader>("shaders/basic.vert",
@@ -46,4 +50,29 @@ void Sample1::Update(float delta_time) {
   }
 }
 
-void Sample1::Render(float aspect_ratio) {}
+void Sample1::Render(float aspect_ratio) {
+  auto projection = perspective(60.f, aspect_ratio, 0.01f, 1000.f);
+  auto view = Mat4f();
+  view.LookAt(Vec3f(0.f, 0.f, -5.f), Vec3f(0.f, 0.f, 0.f),
+              Vec3f(0.f, 1.f, 0.f));
+  auto model = Mat4f();
+  auto light = Vec3f(0.f, 0.f, 1.f);
+
+  m_shader->Bind();
+  m_vertex_position->BindTo(m_shader->GetAttribute("position"));
+  m_vertex_normals->BindTo(m_shader->GetAttribute("normal"));
+  m_vertex_tex_coords->BindTo(m_shader->GetAttribute("texCoord"));
+
+  core::Uniform<Mat4f>::SetData(m_shader->GetUniform("model"), model);
+  core::Uniform<Mat4f>::SetData(m_shader->GetUniform("view"), view);
+  core::Uniform<Mat4f>::SetData(m_shader->GetUniform("projection"), projection);
+  core::Uniform<Vec3f>::SetData(m_shader->GetUniform("light"), light);
+  m_display_texture->Set(m_shader->GetUniform("tex0"), 0.f);
+  core::Draw(*m_index_buffer, core::PrimitiveType::TRIANGLES);
+  m_display_texture->Unset(0);
+
+  m_vertex_position->UnbindFrom(m_shader->GetAttribute("position"));
+  m_vertex_normals->UnbindFrom(m_shader->GetAttribute("normal"));
+  m_vertex_tex_coords->UnbindFrom(m_shader->GetAttribute("texCoord"));
+  m_shader->Unbind();
+}

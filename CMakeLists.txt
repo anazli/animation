@@ -19,9 +19,11 @@ add_library(animation
 	include/glad/glad.h
 	include/KHR/khrplatform.h
 	include/stb/stb_image.h
+	include/math/constants.h
 	include/math/vec2.h
 	include/math/vec3.h
 	include/math/vec4.h
+	include/math/mat4.h
 
 	src/application.cpp
 	src/draw.cpp

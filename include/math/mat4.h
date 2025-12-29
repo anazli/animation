@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include "constants.h"
+#include "math/vec3.h"
 #include "math/vec4.h"
 
 template <class T>
@@ -181,14 +183,14 @@ void Mat4<T>::LookAt(const Vec3<T>& pos, const Vec3<T>& lookAt,
   Vec3<T> fwd = pos - lookAt;
   fwd.normalize();
 
-  Vec3<T> right = up.cross(fwd);
+  Vec3<T> right = cross(up, fwd);
   right.normalize();
 
-  up = fwd.cross(right);
-  up.normalize();
+  auto up_norm = cross(fwd, right);
+  up_norm.normalize();
 
   m_vec[0] = Vec4<T>(right.x(), right.y(), right.z(), -dot(pos, right));
-  m_vec[1] = Vec4<T>(up.x(), up.y(), up.z(), -dot(pos, up));
+  m_vec[1] = Vec4<T>(up_norm.x(), up_norm.y(), up_norm.z(), -dot(pos, up_norm));
   m_vec[2] = Vec4<T>(fwd.x(), fwd.y(), fwd.z(), -dot(pos, fwd));
   m_vec[3] = Vec4<T>(T{0}, T{0}, T{0}, T{1});
 }
@@ -355,4 +357,36 @@ template <typename T>
 std::ostream& operator<<(std::ostream& out, const Mat4<T>& m) {
   out << "{" << m[0] << "," << m[1] << "," << m[2] << "," << m[3] << "}";
   return out;
+}
+
+inline Mat4f frustrum(float left, float right, float bottom, float top,
+                      float near, float far) {
+  if (left == right || top == bottom || near == far) {
+    assert(false);
+    return Mat4f();
+  }
+  auto v1 = Vec4f((2.f * near) / (right - left), 0.f, 0.f, 0.f);
+  auto v2 = Vec4f(0.f, (2.f * near) / (top - bottom), 0.f, 0.f);
+  auto v3 =
+      Vec4f((right + left) / (right - left), (top + bottom) / (top - bottom),
+            -(far + near) / (far - near), -1.f);
+  auto v4 = Vec4f(0.f, 0.f, (-2.f * far * near) / (far - near), 0.f);
+  return Mat4f(v1, v2, v3, v4);
+}
+
+inline Mat4f perspective(float fov, float aspect, float n, float f) {
+  auto ymax = n * tanf(fov * PI / RAD);
+  auto xmax = ymax * aspect;
+  return frustrum(-xmax, xmax, -ymax, ymax, n, f);
+}
+
+inline Mat4f orthographic(float left, float right, float bottom, float top,
+                          float near, float far) {
+  auto v1 = Vec4f(2.f / (right - left), 0.f, 0.f, 0.f);
+  auto v2 = Vec4f(0.f, 2.f / (top - bottom), 0.f, 0.f);
+  auto v3 = Vec4f(0.f, 0.f, -2.f / (far - near), 0.f);
+  auto v4 =
+      Vec4f(-(right + left) / (right - left), -(top + bottom) / (top - bottom),
+            -(far + near) / (far - near), 1);
+  return Mat4f(v1, v2, v3, v4);
 }

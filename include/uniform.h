@@ -11,6 +11,7 @@
 namespace core {
 template <typename T>
 class Uniform {
+ public:
   Uniform() = delete;
   Uniform(const Uniform&) = delete;
   Uniform& operator=(const Uniform&) = delete;
