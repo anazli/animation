@@ -14,9 +14,11 @@ add_library(animation
 	include/draw.h
 	include/index_buffer.h
 	include/shader.h
+	include/texture.h
 	include/uniform.h
 	include/glad/glad.h
 	include/KHR/khrplatform.h
+	include/stb/stb_image.h
 	include/math/vec2.h
 	include/math/vec3.h
 	include/math/vec4.h
@@ -26,8 +28,12 @@ add_library(animation
 	src/glad.c
 	src/index_buffer.cpp
 	src/shader.cpp
+	src/texture.cpp
+	src/stb_image.cpp
 	src/windows.h
 	src/windows.cpp
+	src/sample1/sample1.cpp
+	src/sample1/sample1.h
 )
 
 add_executable(animation-app src/main.cpp)

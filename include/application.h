@@ -15,8 +15,8 @@ class Application {
   const GLuint& GetVertexArrayObject() const;
 
   virtual void Initialize();
-  virtual void Update(float inDeltaTime);
-  virtual void Render(float inAspectRation);
+  virtual void Update(float delta_time);
+  virtual void Render(float aspect_ratio);
   virtual void Shutdown();
 
   static Application* Instance();

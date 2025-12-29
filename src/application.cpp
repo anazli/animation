@@ -10,9 +10,9 @@ const GLuint& core::Application::GetVertexArrayObject() const {
 
 void core::Application::Initialize() {}
 
-void core::Application::Update(float inDeltaTime) {}
+void core::Application::Update(float delta_time) {}
 
-void core::Application::Render(float inAspectRation) {}
+void core::Application::Render(float aspect_ratio) {}
 
 void core::Application::Shutdown() {}
 
