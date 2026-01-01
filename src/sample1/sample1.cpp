@@ -2,15 +2,17 @@
 
 #include "draw.h"
 #include "math/mat4.h"
+#include "math/quat.h"
 #include "uniform.h"
 
-Sample1::Sample1():core::Application() {}
+Sample1::Sample1() : core::Application(), m_rotation(0.f) {}
 
 void Sample1::Initialize() {
   m_rotation = 0.f;
-  m_shader = std::make_unique<core::Shader>("shaders/basic.vert",
-                                            "shaders/basic.frag");
-  m_display_texture = std::make_unique<core::Texture>("assets/uv.png");
+  m_shader = std::make_unique<core::Shader>(GetShadersPath() / "basic.vert",
+                                            GetShadersPath() / "basic.frag");
+  m_display_texture =
+      std::make_unique<core::Texture>(GetAssetsPath() / "uv.png");
 
   m_vertex_position = std::make_unique<core::Attribute<Vec3f>>();
   m_vertex_normals = std::make_unique<core::Attribute<Vec3f>>();
@@ -54,11 +56,10 @@ void Sample1::Update(float delta_time) {
 
 void Sample1::Render(float aspect_ratio) {
   auto projection = perspective(60.f, aspect_ratio, 0.01f, 1000.f);
-  auto view = Mat4f();
-  view.LookAt(Vec3f(0.f, 0.f, -5.f), Vec3f(0.f, 0.f, 0.f),
-              Vec3f(0.f, 1.f, 0.f));
-  auto model = Mat4f(Vec4f(1.f, 1.f, 1.f, 1.f), Vec4f(1.f, 1.f, 1.f, 1.f),
-                     Vec4f(1.f, 1.f, 1.f, 1.f), Vec4f(1.f, 1.f, 1.f, 1.f));
+  auto view =
+      LookAt(Vec3f(0.f, 0.f, -5.f), Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f));
+  auto model =
+      quat_to_mat4(angle_axis(m_rotation * DEG2RAD, Vec3f(0.f, 0.f, 1.f)));
   auto light = Vec3f(0.f, 0.f, 1.f);
 
   m_shader->Bind();

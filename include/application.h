@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <memory>
 
 #include "glad/glad.h"
@@ -21,6 +22,8 @@ class Application {
 
   static Application* Instance();
   static std::unique_ptr<Application> CreateSample1();
+  static std::filesystem::path GetAssetsPath();
+  static std::filesystem::path GetShadersPath();
 
  protected:
   Application();

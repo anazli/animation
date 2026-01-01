@@ -29,4 +29,10 @@ std::unique_ptr<core::Application> core::Application::CreateSample1() {
   return std::make_unique<Sample1>();
 }
 
+std::filesystem::path core::Application::GetAssetsPath() { return ASSETS_DIR; }
+
+std::filesystem::path core::Application::GetShadersPath() {
+  return SHADERS_DIR;
+}
+
 core::Application::Application() : m_vertex_array_obj(0) {}

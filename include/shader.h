@@ -9,7 +9,8 @@ class Shader {
  public:
   enum ShaderType { VERTEX, FRAGMENT };
   Shader();
-  Shader(const std::string& vertex, const std::string& fragment);
+  Shader(const std::filesystem::path& vertex,
+         const std::filesystem::path& fragment);
   ~Shader();
   Shader(const Shader&) = delete;
   Shader& operator=(const Shader&) = delete;
@@ -21,7 +22,8 @@ class Shader {
   unsigned int GetHandle();
 
  private:
-  void Load(const std::string& vertex, const std::string& fragment);
+  void Load(const std::filesystem::path& vertex,
+            const std::filesystem::path& fragment);
   std::string ReadFile(const std::filesystem::path& path);
   unsigned int CompileShader(const std::string& shader, ShaderType type);
   bool LinkShaders(unsigned int vertex, unsigned int fragment);

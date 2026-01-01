@@ -90,6 +90,11 @@ void Vec3<T>::normalize() {
   *this = (*this) / (this->length() + 1.E-30f);
 }
 
+template <typename T>
+Vec3<T> normalized(const Vec3<T>& v) {
+  return v / v.length();
+}
+
 //--------------------------------------------
 // Overloaded I/O operators (input, output)
 //--------------------------------------------

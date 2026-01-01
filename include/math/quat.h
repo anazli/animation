@@ -27,9 +27,6 @@ class Quat {
   float squared_length() const;
   float length() const;
 
-  Quat angle_axis(float angle, const Vec3f& axis);
-  Quat from(const Vec3f& from, const Vec3f& to);
-
   Vec3f get_axis(const Quat& quat);
   float get_angle(const Quat& quat);
 
@@ -78,17 +75,17 @@ inline bool operator==(const Quat& q1, const Quat& q2) {
           fabsf(q1.z() - q2.z()) <= EPS && fabsf(q1.w() - q2.w()) <= EPS);
 }
 
-inline bool operator==(const Quat& q1, const Quat& q2) { return !(q1 == q2); }
+inline bool operator!=(const Quat& q1, const Quat& q2) { return !(q1 == q2); }
 
 inline bool same_orientation(const Quat& q1, const Quat& q2) {
   return (fabsf(q1.x() - q2.x()) <= EPS && fabsf(q1.y() - q2.y()) <= EPS &&
-          fabsf(q1.z() - q2.z()) <= EPS && fabsf(q1.z() - q2.z()) <= EPS) ||
+          fabsf(q1.z() - q2.z()) <= EPS && fabsf(q1.w() - q2.w()) <= EPS) ||
          (fabsf(q1.x() + q2.x()) <= EPS && fabsf(q1.y() + q2.y()) <= EPS &&
-          fabsf(q1.z() + q2.z()) <= EPS && fabsf(q1.z() + q2.z()) <= EPS);
+          fabsf(q1.z() + q2.z()) <= EPS && fabsf(q1.w() + q2.w()) <= EPS);
 }
 
 inline float dot(const Quat& q1, const Quat& q2) {
-  return q1.x() + q2.x() + q1.y() + q2.y() + q1.z() + q2.z() + q1.w() + q2.w();
+  return q1.x() * q2.x() + q1.y() * q2.y() + q1.z() * q2.z() + q1.w() * q2.w();
 }
 
 inline float Quat::squared_length() const {
@@ -119,18 +116,15 @@ inline Quat normalized(const Quat& q) {
   return Quat(q.x() * inv, q.y() * inv, q.z() * inv, q.w() * inv);
 }
 
-inline Quat Quat::angle_axis(float angle, const Vec3f& axis) {
-  Vec3f norm(axis);
-  norm.normalize();
+inline Quat angle_axis(float angle, const Vec3f& axis) {
+  Vec3f norm = normalized(axis);
   auto s = sinf(angle * 0.5f);
   return Quat(norm.x() * s, norm.y() * s, norm.z() * s, cosf(angle * 0.5f));
 }
 
-inline Quat Quat::from(const Vec3f& from, const Vec3f& to) {
-  auto f(from);
-  f.normalize();
-  auto t(to);
-  t.normalize();
+inline Quat from(const Vec3f& from, const Vec3f& to) {
+  auto f = normalized(from);
+  auto t = normalized(to);
 
   if (f == t) {
     return Quat();
@@ -143,21 +137,17 @@ inline Quat Quat::from(const Vec3f& from, const Vec3f& to) {
       ortho = Vec3f(0.f, 0.f, 1.f);
     }
 
-    auto axis = cross(f, ortho);
-    axis.normalize();
+    auto axis = normalized(cross(f, ortho));
     return Quat(axis.x(), axis.y(), axis.z(), 0.f);
   }
 
-  auto half = f + t;
-  half.normalize();
+  auto half = normalized(f + t);
   auto axis = cross(f, half);
   return Quat(axis.x(), axis.y(), axis.z(), dot(f, half));
 }
 
 inline Vec3f Quat::get_axis(const Quat& quat) {
-  Vec3f v(quat.x(), quat.y(), quat.z());
-  v.normalize();
-  return v;
+  return normalized(Vec3f(quat.x(), quat.y(), quat.z()));
 }
 
 inline float Quat::get_angle(const Quat& quat) { return 2.f * acosf(quat.w()); }

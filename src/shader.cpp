@@ -7,31 +7,28 @@
 
 core::Shader::Shader() : m_handle(glCreateProgram()) {}
 
-core::Shader::Shader(const std::string& vertex, const std::string& fragment)
+core::Shader::Shader(const std::filesystem::path& vertex,
+                     const std::filesystem::path& fragment)
     : m_handle(glCreateProgram()) {
   Load(vertex, fragment);
 }
 
 core::Shader::~Shader() { glDeleteProgram(m_handle); }
 
-void core::Shader::Load(const std::string& vertex,
-                        const std::string& fragment) {
-  std::ifstream file(vertex.c_str());
-  bool vert_file = file.good();
-  file.close();
-
-  file = std::ifstream(fragment.c_str());
-  bool frag_file = file.good();
-  file.close();
-
-  std::string vert_source = vertex;
-  if (vert_file) {
-    vert_source = ReadFile(vertex);
+void core::Shader::Load(const std::filesystem::path& vertex,
+                        const std::filesystem::path& fragment) {
+  auto vert_source = ReadFile(vertex);
+  if (vert_source.empty()) {
+    std::cout << "ERROR: Failed to read vertex shader file: " << vertex
+              << std::endl;
+    return;
   }
 
-  std::string frag_source = fragment;
-  if (frag_file) {
-    frag_source = ReadFile(fragment);
+  auto frag_source = ReadFile(fragment);
+  if (frag_source.empty()) {
+    std::cout << "ERROR: Failed to read fragment shader file: " << fragment
+              << std::endl;
+    return;
   }
 
   unsigned int v = CompileShader(vert_source, VERTEX);

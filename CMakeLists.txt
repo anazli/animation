@@ -51,6 +51,8 @@ target_include_directories(animation
 set_source_files_properties(src/glad.c PROPERTIES LANGUAGE C)
 target_compile_definitions(animation PRIVATE
 	$<$<COMPILE_LANGUAGE:C>:GLAD_GLAPI_EXPORT_BUILD>
+	ASSETS_DIR="${CMAKE_SOURCE_DIR}/assets"
+	SHADERS_DIR="${CMAKE_SOURCE_DIR}/shaders"
 )
 
 # Disable specific MSVC warnings when building for Windows using generator expressions

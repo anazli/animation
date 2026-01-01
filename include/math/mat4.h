@@ -87,7 +87,6 @@ class Mat4 {
   }
 
   void Orient(const Vec3<T>& pos, const Vec3<T>& fwd, const Vec3<T>& up);
-  void LookAt(const Vec3<T>& pos, const Vec3<T>& lookAt, const Vec3<T>& up);
 
  private:
   Vec4<T> m_vec[4];
@@ -178,21 +177,18 @@ void Mat4<T>::Orient(const Vec3<T>& pos, const Vec3<T>& fwd,
   m_vec[3] = Vec4<T>(T{0}, T{0}, T{0}, T{1});
 }
 template <typename T>
-void Mat4<T>::LookAt(const Vec3<T>& pos, const Vec3<T>& lookAt,
-                     const Vec3<T>& up) {
-  Vec3<T> fwd = pos - lookAt;
-  fwd.normalize();
+Mat4<T> LookAt(const Vec3<T>& pos, const Vec3<T>& lookAt, const Vec3<T>& up) {
+  Vec3<T> fwd = normalized(pos - lookAt);
+  Vec3<T> right = normalized(cross(up, fwd));
 
-  Vec3<T> right = cross(up, fwd);
-  right.normalize();
+  auto up_norm = normalized(cross(fwd, right));
 
-  auto up_norm = cross(fwd, right);
-  up_norm.normalize();
-
-  m_vec[0] = Vec4<T>(right.x(), right.y(), right.z(), -dot(pos, right));
-  m_vec[1] = Vec4<T>(up_norm.x(), up_norm.y(), up_norm.z(), -dot(pos, up_norm));
-  m_vec[2] = Vec4<T>(fwd.x(), fwd.y(), fwd.z(), -dot(pos, fwd));
-  m_vec[3] = Vec4<T>(T{0}, T{0}, T{0}, T{1});
+  auto vec1 = Vec4<T>(right.x(), right.y(), right.z(), -dot(pos, right));
+  auto vec2 =
+      Vec4<T>(up_norm.x(), up_norm.y(), up_norm.z(), -dot(pos, up_norm));
+  auto vec3 = Vec4<T>(fwd.x(), fwd.y(), fwd.z(), -dot(pos, fwd));
+  auto vec4 = Vec4<T>(T{0}, T{0}, T{0}, T{1});
+  return Mat4<T>(vec1, vec2, vec3, vec4);
 }
 
 template <typename T>
