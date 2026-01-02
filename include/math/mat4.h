@@ -177,18 +177,22 @@ void Mat4<T>::Orient(const Vec3<T>& pos, const Vec3<T>& fwd,
   m_vec[3] = Vec4<T>(T{0}, T{0}, T{0}, T{1});
 }
 template <typename T>
-Mat4<T> LookAt(const Vec3<T>& pos, const Vec3<T>& lookAt, const Vec3<T>& up) {
-  Vec3<T> fwd = normalized(pos - lookAt);
-  Vec3<T> right = normalized(cross(up, fwd));
-
+Mat4<T> LookAt(const Vec3<T>& pos, const Vec3<T>& target, const Vec3<T>& up) {
+  Vec3<T> fwd = normalized(target - pos) * -1.f;
+  Vec3<T> right = cross(up, fwd);
+  if (right == Vec3f(0.f, 0.f, 0.f)) {
+    return Mat4<T>();  // Error
+  }
+  right.normalize();
   auto up_norm = normalized(cross(fwd, right));
 
-  auto vec1 = Vec4<T>(right.x(), right.y(), right.z(), -dot(pos, right));
-  auto vec2 =
-      Vec4<T>(up_norm.x(), up_norm.y(), up_norm.z(), -dot(pos, up_norm));
-  auto vec3 = Vec4<T>(fwd.x(), fwd.y(), fwd.z(), -dot(pos, fwd));
-  auto vec4 = Vec4<T>(T{0}, T{0}, T{0}, T{1});
-  return Mat4<T>(vec1, vec2, vec3, vec4);
+  auto t = Vec3f(-dot(right, pos), -dot(up_norm, pos), -dot(fwd, pos));
+
+  auto v1 = Vec4f(right.x(), up_norm.x(), fwd.x(), 0.f);
+  auto v2 = Vec4f(right.y(), up_norm.y(), fwd.y(), 0.f);
+  auto v3 = Vec4f(right.z(), up_norm.z(), fwd.z(), 0.f);
+  auto v4 = Vec4f(t.x(), t.y(), t.z(), 1.f);
+  return Mat4<T>(v1, v2, v3, v4);
 }
 
 template <typename T>
